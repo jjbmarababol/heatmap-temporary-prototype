@@ -13,6 +13,7 @@ const {
   createBox,
   createSphere,
   mapRangeToAnotherRange,
+  createRadialTexture,
 } = utils;
 
 const VERTEX_SHADER = `
@@ -49,7 +50,7 @@ $(() => {
   const renderer = new THREE.WebGLRenderer({ canvas });
   const camera = createPerspectiveCamera({
     near: 0.1,
-    far: 100,
+    far: 1000,
   });
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -79,6 +80,9 @@ $(() => {
   scene.add(directionalLight);
   scene.add(ambientLight);
   // scene.add(floor);
+
+  // const radialTexturedPlane = createRadialTexturedPlane();
+  // scene.add(radialTexturedPlane);
 
   directionalLight.position.set(-1, 2, 4);
   camera.position.set(0, -20, 40);
@@ -208,11 +212,12 @@ $(() => {
       const box = createSphere();
       const point = intersects[0].point;
       // const temperature = Math.random() * 100;
-      const temperature = mapRangeToAnotherRange(Math.random() * 100, 0, 100, 210, 360)
+      const temperature = mapRangeToAnotherRange(Math.random() * 50, 0, 100, 210, 360)
 
       box.name = mappingId;
       box.userData.type = 'sensor';
-      box.position.set(point.x, point.y, point.z + 0.5);
+      // box.position.set(point.x, point.y, point.z + 0.5);
+      box.position.set(point.x, point.y, 1);
       // box.scale.set(1, 1, 0.5);
       box.scale.set(0.2, 0.2, 0.2);
       // box.material.color.setHex(0xff0000);
@@ -258,21 +263,42 @@ $(() => {
 
       const geometry = new THREE.CircleGeometry(4, 32);
       const material = new THREE.MeshBasicMaterial({
-        // color: 0xffff00,
         color: 'hsl(117, 100%, 50%)',
         side: THREE.DoubleSide,
         opacity: 0.2,
         transparent: true,
+        depthTest: false,
       });
-      const circle = new THREE.Mesh( geometry, material );
+      const circle = new THREE.Mesh(geometry, material);
 
-      circle.position.set(point.x, point.y, point.z + 0.5);
-      // circle.rotation.set(-30 * Math.PI / 180, 0, 0);
+      circle.position.set(point.x, point.y, 1);
 
       scene.add(circle);
 
-      // circle.visible = false;
       sensorRadiusMappings[mappingId] = circle;
+
+      const radialTexture = createRadialTexture(temperature);
+      const canvasTexture = new THREE.CanvasTexture(radialTexture);
+      const geo = new THREE.BufferGeometry();
+
+      geo.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute([
+          point.x, point.y, 1
+        ], 3),
+      );
+
+      const mat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        map: canvasTexture,
+        blending: THREE.AdditiveBlending,
+        size: 14,
+        transparent: true,
+        depthTest: false,
+      });
+      const points = new THREE.Points(geo, mat);
+
+      scene.add(points);
     }
   }, false);
 
@@ -394,6 +420,23 @@ $(() => {
     if (keyboard['d']) {
       controls.moveRight(0.2);
     }
+  }
+
+  function createRadialTexturedPlane(hue = 210, w = 2, h = 2) {
+    const radialTexture = createRadialTexture(hue);
+    const canvasTexture = new THREE.CanvasTexture(radialTexture);
+    const geometry = new THREE.PlaneGeometry(w, h, 8);
+    const material = new THREE.MeshBasicMaterial({
+      side: THREE.DoubleSide,
+      map: canvasTexture,
+      blending: THREE.AdditiveBlending,
+      // polygonOffset: true,
+      // polygonOffsetFactor: -0.1,
+      // // alphaTest: 0.5,
+    });
+    const plane = new THREE.Mesh(geometry, material);
+
+    return plane;
   }
 
 
