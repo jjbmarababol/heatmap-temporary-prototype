@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>day_005</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="main-container" class="main-container flex-layout">
+    <div class="canvas-view">
+      <canvas id="c"></canvas>
+      <div class="toggles">
+        <div class="toggle-label">TOGGLES:</div>
+        <div id="toggle-btns" class="toggle-btns">
+          <button id="btn-toggle-sensor" class="btn-toggle selected">SENSOR</button>
+          <button id="btn-toggle-structure" class="btn-toggle selected">STRUCTURE</button>
+        </div>
+      </div>
+      <div class="heatmap-color">
+        <div class="heatmap"></div>
+      </div>
+      <div id="scene-sensor-label" class="scene-sensor-label"></div>
+      <div id="scene-sensor-label-hover" class="scene-sensor-label"></div>
+      <div id="scene-controls" class="scene-controls">
+        <div class="scene-control-mode">MODES: </div>
+        <div id="scene-controls-buttons" class="scene-controls-buttons">
+          <button
+            class="scene-control-btn"
+            data-control-value="scene-add-sensor">ADD SENSOR</button>
+          <button
+            id="select-sensor-mode"
+            class="scene-control-btn selected"
+            data-control-value="scene-select-sensor">SELECT SENSOR</button>
+          <button
+            data-control-value="fpv"
+            class="scene-control-btn">
+            FPV
+          </button>
+        </div>
+      </div>
+      <img id="wasd" class="wasd active" src="img/wasd.png" />
+    </div>
+    <div id="sensor-list" class="sensor-list"></div>
+    <div class="offset-container">
+      <div class="offset-container-head">
+        <div class="offset-sensor-name">SENSOR NAME</div>
+        <button id="offset-close" class="offset-close">CLOSE</button>
+      </div>
+      <div class="offset-container-body">
+        <div style="width: 32px; height: 32px; background: hsl(244, 100%, 50%);"></div>
+        <h4 class="offset-sensor-heading">Description</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, ullam. Officia totam eius quibusdam id impedit delectus quia ducimus aliquam cum voluptatibus debitis ipsa sunt, iusto unde itaque modi eligendi?</p>
+      </div>
+    </div>
+  </div>
+  <script src="./dist/main.js"></script>
+</body>
+</html>
