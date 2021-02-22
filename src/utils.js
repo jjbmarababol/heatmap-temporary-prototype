@@ -54,3 +54,32 @@ export function createSphere(radius = 1, widthSegment = 8, heightSegment = 8) {
 export function mapRangeToAnotherRange(x, in_min, in_max, out_min, out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+export function createRadialTexture(hue = 210, w = 512, h = 512) {
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  const cx = w / 2;
+  const cy = h / 2;
+  const x = cx;
+  const y = cy;
+  const r = w * 0.5;
+  const radialGradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+
+  radialGradient.addColorStop(0, `hsla(${hue}, 100%, 50%, 1)`);
+  // radialGradient.addColorStop(0.4, `hsla(${hue}, 100%, 50%, 0.8)`);
+  radialGradient.addColorStop(1, `hsla(${hue}, 100%, 0%, 0)`);
+
+  c.width = w;
+  c.height = h;
+
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = radialGradient;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.closePath();
+
+  return c;
+}
