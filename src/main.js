@@ -14,13 +14,32 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+function createBox() {
+  const geometry = new THREE.BoxGeometry();
+  const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  const cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+}
 
-camera.position.z = 4;
+function createLine() {
+  //create a blue LineBasicMaterial
+  const material = new THREE.LineBasicMaterial( { color: 0xFFFFFF } );
+  const points = [];
+  points.push( new THREE.Vector3( - 10, 0, 0 ) );
+  points.push( new THREE.Vector3( 0, 10, 0 ) );
+  points.push( new THREE.Vector3( 10, 0, 10 ) );
 
+  console.log('Line Points: ', points);
+  const geometry = new THREE.BufferGeometry().setFromPoints( points );
+  const line = new THREE.Line( geometry, material );
+  scene.add( line );
+}
+
+createLine();
+
+
+camera.position.set( 0, 0, 50 );
+camera.lookAt( 0, 0, 0 );
 
 function animate() {
   // cube.rotation.x += 0.01;
